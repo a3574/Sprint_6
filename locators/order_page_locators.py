@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 
+
 class OrderPageLocators:
     FIRST_NAME_FIELD = (By.XPATH, ".//input[@placeholder = '* Имя']")
     LAST_NAME_FIELD = (By.XPATH, ".//input[@placeholder = '* Фамилия']")
@@ -20,4 +21,3 @@ class OrderPageLocators:
     ACCEPT_ORDER_BUTTON = (By.XPATH, ".//*[text()='Да']")
     CHECK_STATUS_BUTTON = (By.XPATH, ".//*[text()='Посмотреть статус']")
     NUMBER_ORDER_LABEL = (By.CLASS_NAME, 'Order_Text__2broi')
-

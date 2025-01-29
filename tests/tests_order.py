@@ -3,13 +3,14 @@ import allure
 from pages.main_page import MainPage
 from pages.order_page import OrderPage
 from pages.track_page import TrackPage
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
 from urls import Urls
 from helpers import UserData
-class TestOrder():
+
+
+class TestOrder:
     @allure.title('Заказ самоката')
-    @allure.description('Проверяем весь флоу позитивного сценария с двумя наборами данных. Проверяем по отдельности две точки входа в сценарий: кнопка «Заказать» вверху страницы и внизу. Проверяем: 1, что появилось всплывающее окно с сообщением об успешном создании заказа; 2 что если нажать на логотип «Самоката», попадёшь на главную страницу «Самоката»; 3 что если нажать на логотип Яндекса, в новом окне через редирект откроется главная страница Дзена. На вход теста подаются 2 набора данных через параметризацию')
+    @allure.description(
+        'Проверяем весь флоу позитивного сценария с двумя наборами данных. Проверяем по отдельности две точки входа в сценарий: кнопка «Заказать» вверху страницы и внизу. Проверяем: 1, что появилось всплывающее окно с сообщением об успешном создании заказа; 2 что если нажать на логотип «Самоката», попадёшь на главную страницу «Самоката»; 3 что если нажать на логотип Яндекса, в новом окне через редирект откроется главная страница Дзена. На вход теста подаются 2 набора данных через параметризацию')
     @pytest.mark.parametrize("data", UserData.get_test_data_for_tests_order())
     def test_order_with_two_different_entry_order_has_been_placed(self, data):
         main_page = MainPage(self.driver)
@@ -88,7 +89,8 @@ class TestOrder():
 
         # Переходим на главную страницу
         track_page.select_scooter_link()
-        WebDriverWait(self.driver, 15).until(expected_conditions.url_changes(Urls.main_page))
+        print(self.driver.current_url)
+        track_page.wait_url_changes(Urls.main_page)
         if self.driver.current_url == Urls.main_page_directory:
             check_move_main_page = '1'
 
@@ -99,11 +101,10 @@ class TestOrder():
 
         # Переходим на страницу Дзена
         track_page.select_yandex_link()
-        self.driver.switch_to.window(self.driver.window_handles[1])
-        WebDriverWait(self.driver, 15).until(expected_conditions.title_contains('Дзен'))
+        track_page.switch_to_tab(1)
+        track_page.wait_title_contains('Дзен')
         if self.driver.current_url == Urls.dzen_page:
             check_move_dzen_page = '1'
 
         # Проверяем, что удалось завести заказ(есть номер заказа), что был переход с формы отслеживания заказа как на главную страницу, так и на страницу дзена.
         assert check_move_dzen_page == '1' and check_move_main_page == '1' and order_number != ''
-
