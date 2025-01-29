@@ -1,6 +1,4 @@
 import allure
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
 from locators.main_page_locators import MainPageLocators
 from locators.base_page_locators import BasePageLocators
 from pages.base_page import BasePage
@@ -38,10 +36,11 @@ class MainPage(BasePage):
         main_page = MainPage(self.driver)
         question_element = main_page.find_on_element_by_xpath(".//*[text()=\"" + question + "\"]")
         self.driver.execute_script("arguments[0].scrollIntoView();", question_element)
+        main_page.wait_visibility_of_element(question_element)
         question_element.click()
         answer_element = main_page.find_on_element_by_xpath(
             ".//*[text()=\"" + question + "\"]/parent::div/following::div/p")
-        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of(answer_element))
+        main_page.wait_visibility_of_element(answer_element)
         return answer_element.text
 
     @allure.step('Клик по кнопке Статус заказа')

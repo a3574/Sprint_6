@@ -38,8 +38,7 @@ class BasePage:
         element = self.driver.find_element(*element)
         WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(element))
 
-    def wait_visibility_of_element_by_xpath(self, *element):
-        element = self.driver.find_element(*element)
+    def wait_visibility_of_element(self, element):
         WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of(element))
 
     def find_on_element_by_xpath(self, xpath):
